@@ -184,7 +184,7 @@ const data = [
 ];
 
 
-function Tables() {
+function Listings() {
   const onChange = (e) => console.log(`radio checked:${e.target.value}`);
 
   return (
@@ -213,4 +213,4 @@ function Tables() {
   );
 }
 
-export default Tables;
+export default Listings;

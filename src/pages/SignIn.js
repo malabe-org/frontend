@@ -1,5 +1,6 @@
 
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
+import { login } from "../services/user";
 import {
   Layout,
   Button,
@@ -10,21 +11,25 @@ import {
   Input,
 } from "antd";
 import signinbg from "../assets/images/img-signin.jpg";
-
+import PropTypes from "prop-types";
 
 const { Title } = Typography;
 const { Header, Footer, Content } = Layout;
 
 
-export default class SignIn extends Component {
-  render() {
-    const onFinish = (values) => {
-      console.log("Success:", values);
+export default function SignIn({setToken}){
+    const onFinish = async (values) => {
+      // console.log(values);
+      await login(values).then(data => {
+        if(data != ""){
+          setToken(data);
+        }
+      })
     };
-
     const onFinishFailed = (errorInfo) => {
       console.log("Failed:", errorInfo);
     };
+
     return (
       <>
         <Layout className="layout-default layout-signin">
@@ -40,7 +45,7 @@ export default class SignIn extends Component {
                 lg={{ span: 6, offset: 2 }}
                 md={{ span: 12 }}
               >
-                <Title className="mb-15">Sign In</Title>
+                <Title className="mb-15">Connexion</Title>
                 <Title className="font-regular text-muted" level={5}>
                   Entrer votre email et votre mot de passe
                 </Title>
@@ -61,7 +66,7 @@ export default class SignIn extends Component {
                       },
                     ]}
                   >
-                    <Input placeholder="Email" />
+                    <Input placeholder="Email"/>
                   </Form.Item>
 
                   <Form.Item
@@ -75,14 +80,7 @@ export default class SignIn extends Component {
                       },
                     ]}
                   >
-                    <Input placeholder="Mot de passe" />
-                  </Form.Item>
-
-                  <Form.Item
-                    name="remember"
-                    className="aligin-center"
-                    valuePropName="checked"
-                  >
+                    <Input type="password" placeholder="Mot de passe"/>
                   </Form.Item>
                   <Form.Item>
                     <Button
@@ -115,5 +113,8 @@ export default class SignIn extends Component {
         </Layout>
       </>
     );
-  }
+}
+
+SignIn.propTypes = {
+  setToken : PropTypes.func.isRequired
 }

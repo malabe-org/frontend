@@ -1,14 +1,3 @@
-/*!
-  =========================================================
-  * Muse Ant Design Dashboard - v1.0.0
-  =========================================================
-  * Product Page: https://www.creative-tim.com/product/muse-ant-design-dashboard
-  * Copyright 2021 Creative Tim (https://www.creative-tim.com)
-  * Licensed under MIT (https://github.com/creativetimofficial/muse-ant-design-dashboard/blob/main/LICENSE.md)
-  * Coded by Creative Tim
-  =========================================================
-  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 import { useState } from "react";
 
 import {
@@ -16,35 +5,16 @@ import {
   Col,
   Row,
   Typography,
-  Tooltip,
   Progress,
   Upload,
   message,
   Button,
-  Timeline,
-  Radio,
 } from "antd";
 import {
   ToTopOutlined,
-  MenuUnfoldOutlined,
-  RightOutlined,
 } from "@ant-design/icons";
 import Paragraph from "antd/lib/typography/Paragraph";
-
-import Echart from "../components/chart/EChart";
-import LineChart from "../components/chart/LineChart";
-
-import ava1 from "../assets/images/logo-shopify.svg";
-import ava2 from "../assets/images/logo-atlassian.svg";
-import ava3 from "../assets/images/logo-slack.svg";
-import ava4 from "../assets/images/logo-spotify.svg";
-import ava5 from "../assets/images/logo-jira.svg";
-import ava6 from "../assets/images/logo-invision.svg";
-import team1 from "../assets/images/team-1.jpg";
-import team2 from "../assets/images/team-2.jpg";
-import team3 from "../assets/images/team-3.jpg";
-import team4 from "../assets/images/team-4.jpg";
-import card from "../assets/images/info-card-1.jpg";
+import Decision from '../components/boxes/decision';
 
 function Home() {
   const { Title, Text } = Typography;
@@ -138,56 +108,47 @@ function Home() {
 
   const list = [
     {
-      Title: "Soft UI Shopify Version",
-      bud: "$14,000",
+      Title: "Photocopie CNI",
+      infos: "Pas d'infos",
       progress: <Progress percent={60} size="small" />,
-      member: (
+      type: (
         <div className="avatar-group mt-2">
-          <Tooltip placement="bottom" title="Ryan Tompson">
-            <img className="tootip-img" src={team1} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Romina Hadid">
-            <img className="tootip-img" src={team2} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Alexander Smith">
-            <img className="tootip-img" src={team3} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Jessica Doe">
-            <img className="tootip-img" src={team4} alt="" />
-          </Tooltip>
+          <p>IMAGE</p>
+        </div>
+      ),
+      link: (
+        <div className="avatar-group mt-2">
+          <p><a href="#">ICI</a></p>
         </div>
       ),
     },
     {
-      Title: "Progress Track",
-      bud: "$3,000",
+      Title: "Photo d'identité",
+      infos: "Pas d'infos",
       progress: <Progress percent={10} size="small" />,
-      member: (
+      type: (
         <div className="avatar-group mt-2">
-          <Tooltip placement="bottom" title="Ryan Tompson">
-            <img className="tootip-img" src={team1} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Romina Hadid">
-            <img className="tootip-img" src={team2} alt="" />
-          </Tooltip>
+          <p>IMAGE</p>
+        </div>
+      ),
+      link: (
+        <div className="avatar-group mt-2">
+          <p><a href="#">ICI</a></p>
         </div>
       ),
     },
     {
-      Title: "Fix Platform Errors",
-      bud: "Not Set",
+      Title: "Quitance de paiement",
+      infos: "Pas d'infos",
       progress: <Progress percent={100} size="small" status="active" />,
-      member: (
+      type: (
         <div className="avatar-group mt-2">
-          <Tooltip placement="bottom" title="Ryan Tompson">
-            <img className="tootip-img" src={team1} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Romina Hadid">
-            <img className="tootip-img" src={team1} alt="" />
-          </Tooltip>
-          <Tooltip placement="bottom" title="Alexander Smith">
-            <img className="tootip-img" src={team3} alt="" />
-          </Tooltip>
+          <p>PDF</p>
+        </div>
+      ),
+      link: (
+        <div className="avatar-group mt-2">
+          <p><a href="#">ICI</a></p>
         </div>
       ),
     },
@@ -213,7 +174,7 @@ function Home() {
   return (
     <>
       <div className="layout-content">
-        
+
         <Row className="rowgap-vbox" gutter={[24, 0]}>
           {count.map((c, index) => (
             <Col
@@ -245,13 +206,7 @@ function Home() {
         </Row>
 
         <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={12} lg={12} xl={10} className="mb-24">
-
-          </Col>
-
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} md={12} sm={24} lg={12} xl={14} className="mb-24">
+          <Col xs={24} md={20} sm={24} lg={12} xl={14} className="mb-24">
             <Card bordered={false} className="criclebox h-full">
               <Row gutter>
                 <Col
@@ -281,7 +236,7 @@ function Home() {
                   className="col-img"
                 >
                   <div className="ant-cret text-right">
-                    <img src={card} alt="" className="border10" />
+                    <img src="https://media-exp1.licdn.com/dms/image/C4E03AQGr-YK8gRgAsA/profile-displayphoto-shrink_100_100/0/1626970600352?e=1640822400&v=beta&t=owKOG2iGeEk6f7iNAXz-jzT_bY6fjCubry6AunHvgGo" alt="" className="border10" />
                   </div>
                 </Col>
               </Row>
@@ -289,20 +244,20 @@ function Home() {
           </Col>
         </Row>
         <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={12} lg={12} xl={16} className="mb-24">
+          <Col xs={24} sm={24} md={20} lg={20} xl={20} className="mb-24">
             <Card bordered={false} className="criclebox cardbody h-full">
               <div className="project-ant">
                 <div>
                   <Title level={5}>Documents</Title>
                 </div>
-                </div>
+              </div>
               <div className="ant-list-box table-responsive">
                 <table className="width-100">
                   <thead>
                     <tr>
                       <th>DOCUMENT</th>
                       <th>TYPE</th>
-                      <th>BUDGET</th>
+                      <th>INFOS</th>
                       <th>LIEN</th>
                     </tr>
                   </thead>
@@ -319,21 +274,21 @@ function Home() {
                             {d.Title}
                           </h6>
                         </td>
-                        <td>{d.member}</td>
+                        <td>{d.type}</td>
                         <td>
                           <span className="text-xs font-weight-bold">
-                            {d.bud}{" "}
+                            {d.infos}{" "}
                           </span>
                         </td>
                         <td>
-                          <div className="percent-progress">{d.progress}</div>
+                          {d.link}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-              <div className="uploadfile shadow-none">
+              {/* <div className="uploadfile shadow-none">
                 <Upload {...uploadProps}>
                   <Button
                     type="dashed"
@@ -343,9 +298,23 @@ function Home() {
                     <span className="click">Click to Upload</span>
                   </Button>
                 </Upload>
-              </div>
+              </div> */}
             </Card>
-          </Col></Row>
+          </Col>
+        </Row>
+        <Row  gutter={[24, 0]}>
+          <Col xs={24} sm={24} md={20} lg={20} xl={20} className="mb-24" >
+            <Card bordered={false} className="criclebox cardbody h-full">
+            <div className="project-ant">
+                <div>
+                  <Title level={5}>Décision</Title>
+                </div>
+              </div>
+              <Decision />
+            </Card>
+          </Col>
+        </Row>
+
       </div>
     </>
   );
