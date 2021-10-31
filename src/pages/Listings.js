@@ -68,9 +68,9 @@ const columns = [
     width: "32%",
   },
   {
-    title: "FUNCTION",
-    dataIndex: "function",
-    key: "function",
+    title: "CNI",
+    dataIndex: "cni",
+    key: "cni",
   },
 
   {
@@ -103,17 +103,16 @@ const data = [
             src={face2}
           ></Avatar>
           <div className="avatar-info">
-            <Title level={5}>Michael John</Title>
-            <p>michael@mail.com</p>
+            <Title level={5}>Alioune SARR</Title>
+            <p>Né le 17/09/1998 à DAKAR</p>
           </div>
         </Avatar.Group>{" "}
       </>
     ),
-    function: (
+    cni: (
       <>
         <div className="author-info">
-          <Title level={5}>Manager</Title>
-          <p>Organization</p>
+          <Title level={5}>1870199802018</Title>
         </div>
       </>
     ),
@@ -133,54 +132,6 @@ const data = [
       </>
     ),
   },
-
-  {
-    key: "2",
-    name: (
-      <>
-        <Avatar.Group>
-          <Avatar
-            className="shape-avatar"
-            shape="square"
-            size={40}
-            src={face3}
-          ></Avatar>
-          <div className="avatar-info">
-            <Title level={5}>Alexa Liras</Title>
-            <p>alexa@mail.com</p>
-          </div>
-        </Avatar.Group>{" "}
-      </>
-    ),
-    function: (
-      <>
-        <div className="author-info">
-          <Title level={5}>Programator</Title>
-          <p>Developer</p>
-        </div>
-      </>
-    ),
-
-    status: (
-      <>
-        <Button className="tag-badge">REJET</Button>
-      </>
-    ),
-    dateSoumission: (
-      <>
-        <div className="ant-employed">
-          <span>23/12/20</span>
-        </div>
-      </>
-    ),
-    dateCloture: (
-      <>
-        <div className="ant-employed">
-          <span>23/12/20</span>
-        </div>
-      </>
-    ),
-  }
 ];
 
 
