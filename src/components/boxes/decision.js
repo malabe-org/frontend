@@ -15,30 +15,36 @@ const tailLayout = {
 export default function Decision({ setTreated, treatment, token }) {
 
     const [form] = Form.useForm();
-    const [motif, setMotif] = useState();
+    const [motif, setMotif] = useState(treatment.reason);
+    console.log(treatment.reason);
     const [loading, setLoading] = useState(false);
     const onFinish = async (values) => {
-        console.log(values);
+        // console.log(values);
         setLoading(true);
         values.reason = motif;
         if(values.reason != "" && values.decision != "")
             await updateTreatment(treatment._id, values, token);
-        alert("Les champs ne doivent pas être vides.")
-        setTreated(false);
+        else{
+            alert("Les champs ne doivent pas être vides.")
+        }
+        setLoading(false);
+        setTreated(true);
     }
+    {/* <LoadingOutlined style={{ fontSize: "100px", color: "red" }} width="0px" height="0px"/> */}
+
     return (
 
         <div className="h-full col-content">
             {
                 loading ?
-                    <LoadingOutlined style={{ fontSize: "100px", color: "red" }} label="En cours de chargement..." />
+                    <p>Chargement en cours...</p>
                     :
 
                     <Form {...layout} name="control-hooks" onFinish={onFinish} form={form} layout="vertical" className="row-col">
-                        <Form.Item name="decision" rules={requiredFormRule}>
+                        <Form.Item name="decision" rules={requiredFormRule} initialValue={treatment.decision}>
                             <Select placeholder="Décision finale de la demande">
-                                <Option value="Ok" >Conforme</Option>
-                                <Option value="Non-Ok" >Non Conforme</Option>
+                                <Option value="OK">Conforme</Option>
+                                <Option value="No-OK">Non Conforme</Option>
                             </Select>
                         </Form.Item>
                         <Form.Item rules={requiredFormRule}>

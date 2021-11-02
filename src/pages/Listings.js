@@ -50,6 +50,8 @@ function buildDataTabelRows(requests) {
   var rows = [];
   requests.map((request, index) => {
     const created_at = new Date(request.created_at);
+    const updated_at = new Date(request.updated_at);
+    
     rows.push(
       {
         key: index,
@@ -80,12 +82,12 @@ function buildDataTabelRows(requests) {
         status: (
           <>
 
-            {request.treatment.decision == "Ok" ?
+            {request.treatment.decision == "OK" ?
               <Button type="primary" className="tag-primary">
                 {"Conforme"}
               </Button>
               :
-              (request.treatment.decision == "Non-Ok" ?
+              (request.treatment.decision == "No-OK" ?
                 <Button type="dashed" className="tag-primary">
                   {"Non Conforme"}
                 </Button>
@@ -107,8 +109,8 @@ function buildDataTabelRows(requests) {
         dateCloture: (
           <>
             <div className="ant-employed">
-              {request.treatment.decision == "Ok" ?
-                <span>{created_at.toUTCString()}</span>
+              {request.treatment.decision == "OK" ?
+                <span>{updated_at.toUTCString()}</span>
                 :
                 ""
               }

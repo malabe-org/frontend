@@ -17,6 +17,7 @@ function App() {
   const {token, setToken} = useToken();
 
   if(!token) return <SignIn setToken={setToken}/>;
+  
   return (
     <div className="App">
       <Switch>
@@ -31,8 +32,11 @@ function App() {
           {/* For Admin only */}
           <Route exact path="/users" component={UsersList} />
 
-
-          <Redirect from="*" to="/dashboard" />
+          {token.role == "phUser" ? 
+            <Redirect from="*" to="/dashboard" />
+            :
+            <Redirect from="*" to="/users" />
+          }
         </Main>
       </Switch>
     </div>

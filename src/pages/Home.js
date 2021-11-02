@@ -51,7 +51,7 @@ function Home() {
     let mounted = true;
     setLoading(true);
     getRequestsForPhUser(user.token).then(req => {
-      console.log(req)
+      // console.log(req)
       if (req != "" && mounted) {
         setRequest(req.currentRequest);
         if((!("isOpen" in req.currentRequest.treatment))

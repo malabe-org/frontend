@@ -2,11 +2,14 @@
 import { Menu, Button } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
+import useToken from "../../hooks/useToken";
 
 function Sidenav({ color }) {
   const { pathname } = useLocation();
   const page = pathname.replace("/", "");
 
+  const {token, setToken} = useToken();
+  const user = JSON.parse(token);
   const dashboard = [
     <svg
       width="20"
@@ -137,6 +140,8 @@ function Sidenav({ color }) {
       </div>
       <hr />
       <Menu theme="light" mode="inline">
+      {user.role == "phUser" ?
+        <>
         <Menu.Item key="1">
           <NavLink to="/dashboard">
             <span
@@ -163,7 +168,7 @@ function Sidenav({ color }) {
             <span className="label">Listing</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="3">
+        {/* <Menu.Item key="3">
           <NavLink to="/signatures">
             <span
               className="icon"
@@ -175,7 +180,7 @@ function Sidenav({ color }) {
             </span>
             <span className="label">Signatures</span>
           </NavLink>
-        </Menu.Item>
+        </Menu.Item> */}
         
         <Menu.Item className="menu-item-header" key="4">
           Mon Compte
@@ -193,10 +198,9 @@ function Sidenav({ color }) {
             <span className="label">Profil</span>
           </NavLink>
         </Menu.Item>
+        </>
         
-        <Menu.Item className="menu-item-header" key="6">
-          Admin
-        </Menu.Item>
+        :
         <Menu.Item key="7">
           <NavLink to="/users">
             <span
@@ -210,6 +214,7 @@ function Sidenav({ color }) {
             <span className="label">Utilisateurs</span>
           </NavLink>
         </Menu.Item>
+      }
       </Menu>
 
     </>
