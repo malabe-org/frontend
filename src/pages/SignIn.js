@@ -1,4 +1,3 @@
-
 import React, { Component, useState } from "react";
 import { login } from "../services/user";
 import {
@@ -9,22 +8,30 @@ import {
   Typography,
   Form,
   Input,
+  Tag,
 } from "antd";
 import signinbg from "../assets/images/img-signin.jpg";
 import PropTypes from "prop-types";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 const { Header, Footer, Content } = Layout;
 
 
 export default function SignIn({setToken}){
+    const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
     const onFinish = async (values) => {
-      // console.log(values);
+      setLoading(true);
       await login(values).then(data => {
         if(data != ""){
           setToken(data);
         }
+        else{
+          setMessage("Login ou mot de passe invalide.");
+        }
       })
+      setLoading(false);
     };
     const onFinishFailed = (errorInfo) => {
       console.log("Failed:", errorInfo);
@@ -49,6 +56,8 @@ export default function SignIn({setToken}){
                 <Title className="font-regular text-muted" level={5}>
                   Entrer votre email et votre mot de passe
                 </Title>
+                {message != "" ? <Tag color="magenta">{message}</Tag> : ""}
+
                 <Form
                   onFinish={onFinish}
                   onFinishFailed={onFinishFailed}
@@ -82,13 +91,14 @@ export default function SignIn({setToken}){
                   >
                     <Input type="password" placeholder="Mot de passe"/>
                   </Form.Item>
+                  <br/>
                   <Form.Item>
                     <Button
                       type="primary"
                       htmlType="submit"
                       style={{ width: "100%" }}
                     >
-                      CONNEXION
+                      {loading ? <LoadingOutlined></LoadingOutlined> : "CONNEXION"}
                     </Button>
                   </Form.Item>
                 </Form>

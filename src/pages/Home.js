@@ -1,27 +1,80 @@
-import { useState } from "react";
-
 import {
   Card,
   Col,
   Row,
   Typography,
-  Progress,
-  Upload,
-  message,
-  Button,
 } from "antd";
-import {
-  ToTopOutlined,
-} from "@ant-design/icons";
 import Paragraph from "antd/lib/typography/Paragraph";
+import { useEffect, useState } from "react";
 import Decision from '../components/boxes/decision';
+import useToken from "../hooks/useToken";
+import { getRequestsForPhUser, updateTreatment } from "../services/request";
+import { LoadingOutlined } from "@ant-design/icons";
 
+function generateTrDocument(label, infos, link) {
+  return (
+    <tr>
+      <td>
+        <h6>
+          {label}
+        </h6>
+      </td>
+      <td>
+        <div className="avatar-group mt-2">
+          <p>{link.includes("pdf") ? "PDF" : "IMAGE"}</p>
+        </div>
+      </td>
+      <td>
+        <span className="text-xs font-weight-bold">
+          {infos == "" ? "Pas d'infos" : infos}
+        </span>
+      </td>
+      <td>
+        <div className="avatar-group mt-2">
+          <p><a href={link} target="_blank">ICI</a></p>
+        </div>
+      </td>
+    </tr>
+  )
+}
 function Home() {
   const { Title, Text } = Typography;
 
-  const onChange = (e) => console.log(`radio checked:${e.target.value}`);
+  const [request, setRequest] = useState(undefined);
+  const [treated, setTreated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const {token, setToken } = useToken();
+  const user = JSON.parse(token);
 
-  const [reverse, setReverse] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    getRequestsForPhUser(user.token).then(req => {
+      console.log(req)
+      if (req != "" && mounted) {
+        setRequest(req.currentRequest);
+        if((!("isOpen" in req.currentRequest.treatment))
+          ||
+        ("isOpen" in req.currentRequest.treatment && req.currentRequest.treatment.isOpen == false)){
+          const values ={
+            isOpen: true,
+            openDate: Date.now()
+          }
+          // console.log(!("isOpen" in req.currentRequest.treatment));
+          // console.log(("isOpen" in req.currentRequest.treatment && req.currentRequest.treatment.isOpen == false))
+          // console.log("Updating", req.currentRequest.treatment._id, values, user.token)
+          updateTreatment(req.currentRequest.treatment._id, values, user.token);
+        }
+      }
+      else {
+        setRequest(undefined);
+      }
+      setLoading(false);
+    });
+
+    return () => mounted = false;
+  }, [treated])
 
   const profile = [
     <svg
@@ -106,217 +159,127 @@ function Home() {
     },
   ];
 
-  const list = [
-    {
-      Title: "Photocopie CNI",
-      infos: "Pas d'infos",
-      progress: <Progress percent={60} size="small" />,
-      type: (
-        <div className="avatar-group mt-2">
-          <p>IMAGE</p>
-        </div>
-      ),
-      link: (
-        <div className="avatar-group mt-2">
-          <p><a href="#">ICI</a></p>
-        </div>
-      ),
-    },
-    {
-      Title: "Photo d'identité",
-      infos: "Pas d'infos",
-      progress: <Progress percent={10} size="small" />,
-      type: (
-        <div className="avatar-group mt-2">
-          <p>IMAGE</p>
-        </div>
-      ),
-      link: (
-        <div className="avatar-group mt-2">
-          <p><a href="#">ICI</a></p>
-        </div>
-      ),
-    },
-    {
-      Title: "Quitance de paiement",
-      infos: "Pas d'infos",
-      progress: <Progress percent={100} size="small" status="active" />,
-      type: (
-        <div className="avatar-group mt-2">
-          <p>PDF</p>
-        </div>
-      ),
-      link: (
-        <div className="avatar-group mt-2">
-          <p><a href="#">ICI</a></p>
-        </div>
-      ),
-    },
-  ];
-  const uploadProps = {
-    name: "file",
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-    headers: {
-      authorization: "authorization-text",
-    },
-    onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
-
   return (
-    <>
-      <div className="layout-content">
+    <>{
+      loading ?
+        <LoadingOutlined style={{fontSize: "100px", color: "red"}} label="En cours de chargement..."/>
+        :
 
-        <Row className="rowgap-vbox" gutter={[24, 0]}>
-          {count.map((c, index) => (
-            <Col
-              key={index}
-              xs={24}
-              sm={24}
-              md={12}
-              lg={6}
-              xl={6}
-              className="mb-24"
-            >
-              <Card bordered={false} className="criclebox ">
-                <div className="number">
-                  <Row align="middle" gutter={[24, 0]}>
-                    <Col xs={18}>
-                      <span>{c.today}</span>
-                      <Title level={3}>
-                        {c.title} <small className={c.bnb}>{c.persent}</small>
-                      </Title>
+        request == undefined ?
+          <h2>Pas de demande à traiter pour le moment.</h2>
+          :
+          <div className="layout-content">
+            <Row className="rowgap-vbox" gutter={[24, 0]}>
+              {count.map((c, index) => (
+                <Col
+                  key={index}
+                  xs={24}
+                  sm={24}
+                  md={12}
+                  lg={6}
+                  xl={6}
+                  className="mb-24"
+                >
+                  <Card bordered={false} className="criclebox ">
+                    <div className="number">
+                      <Row align="middle" gutter={[24, 0]}>
+                        <Col xs={18}>
+                          <span>{c.today}</span>
+                          <Title level={3}>
+                            {c.title} <small className={c.bnb}>{c.persent}</small>
+                          </Title>
+                        </Col>
+                        <Col xs={6}>
+                          <div className="icon-box">{c.icon}</div>
+                        </Col>
+                      </Row>
+                    </div>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+
+            <Row gutter={[24, 0]}>
+              <Col xs={24} md={20} sm={24} lg={12} xl={14} className="mb-24">
+                <Card bordered={false} className="criclebox h-full">
+                  <Row gutter>
+                    <Col
+                      xs={24}
+                      md={12}
+                      sm={24}
+                      lg={12}
+                      xl={14}
+                      className="mobile-24"
+                    >
+                      <div className="h-full col-content p-20">
+                        <div className="ant-muse">
+                          <Text>Built by developers</Text>
+                          <Title level={5}>{request.seeker.firstname} {request.seeker.lastname}</Title>
+                          <Paragraph className="lastweek mb-36">
+                            CNI : <b>{request.seeker._id}</b>
+                          </Paragraph>
+                        </div>
+                      </div>
                     </Col>
-                    <Col xs={6}>
-                      <div className="icon-box">{c.icon}</div>
+                    <Col
+                      xs={24}
+                      md={12}
+                      sm={24}
+                      lg={12}
+                      xl={10}
+                      className="col-img"
+                    >
+                      <div className="ant-cret text-right">
+                        <img src="https://media-exp1.licdn.com/dms/image/C4E03AQGr-YK8gRgAsA/profile-displayphoto-shrink_100_100/0/1626970600352?e=1640822400&v=beta&t=owKOG2iGeEk6f7iNAXz-jzT_bY6fjCubry6AunHvgGo" alt="" className="border10" />
+                      </div>
                     </Col>
                   </Row>
-                </div>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-
-        <Row gutter={[24, 0]}>
-          <Col xs={24} md={20} sm={24} lg={12} xl={14} className="mb-24">
-            <Card bordered={false} className="criclebox h-full">
-              <Row gutter>
-                <Col
-                  xs={24}
-                  md={12}
-                  sm={24}
-                  lg={12}
-                  xl={14}
-                  className="mobile-24"
-                >
-                  <div className="h-full col-content p-20">
-                    <div className="ant-muse">
-                      <Text>Built by developers</Text>
-                      <Title level={5}>Alioune SARR</Title>
-                      <Paragraph className="lastweek mb-36">
-                        Né le 17/09/1998 à Dakar - SENEGAL
-                      </Paragraph>
+                </Card>
+              </Col>
+            </Row>
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={20} lg={20} xl={20} className="mb-24">
+                <Card bordered={false} className="criclebox cardbody h-full">
+                  <div className="project-ant">
+                    <div>
+                      <Title level={5}>Documents</Title>
                     </div>
                   </div>
-                </Col>
-                <Col
-                  xs={24}
-                  md={12}
-                  sm={24}
-                  lg={12}
-                  xl={10}
-                  className="col-img"
-                >
-                  <div className="ant-cret text-right">
-                    <img src="https://media-exp1.licdn.com/dms/image/C4E03AQGr-YK8gRgAsA/profile-displayphoto-shrink_100_100/0/1626970600352?e=1640822400&v=beta&t=owKOG2iGeEk6f7iNAXz-jzT_bY6fjCubry6AunHvgGo" alt="" className="border10" />
+                  <div className="ant-list-box table-responsive">
+                    <table className="width-100">
+                      <thead>
+                        <tr>
+                          <th>DOCUMENT</th>
+                          <th>TYPE</th>
+                          <th>INFOS</th>
+                          <th>LIEN</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {generateTrDocument("Photocopie CNI", "", request.documents.cniCopy)}
+                        {generateTrDocument("Quittance de paiement", "", request.documents.receipt)}
+                        {generateTrDocument("Photo d'identité", "", request.documents.seekerPhoto)}
+                      </tbody>
+                    </table>
                   </div>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-        </Row>
-        <Row gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={20} lg={20} xl={20} className="mb-24">
-            <Card bordered={false} className="criclebox cardbody h-full">
-              <div className="project-ant">
-                <div>
-                  <Title level={5}>Documents</Title>
-                </div>
-              </div>
-              <div className="ant-list-box table-responsive">
-                <table className="width-100">
-                  <thead>
-                    <tr>
-                      <th>DOCUMENT</th>
-                      <th>TYPE</th>
-                      <th>INFOS</th>
-                      <th>LIEN</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {list.map((d, index) => (
-                      <tr key={index}>
-                        <td>
-                          <h6>
-                            <img
-                              src={d.img}
-                              alt=""
-                              className="avatar-sm mr-20"
-                            />{" "}
-                            {d.Title}
-                          </h6>
-                        </td>
-                        <td>{d.type}</td>
-                        <td>
-                          <span className="text-xs font-weight-bold">
-                            {d.infos}{" "}
-                          </span>
-                        </td>
-                        <td>
-                          {d.link}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              {/* <div className="uploadfile shadow-none">
-                <Upload {...uploadProps}>
-                  <Button
-                    type="dashed"
-                    className="ant-full-box"
-                    icon={<ToTopOutlined />}
-                  >
-                    <span className="click">Click to Upload</span>
-                  </Button>
-                </Upload>
-              </div> */}
-            </Card>
-          </Col>
-        </Row>
-        <Row  gutter={[24, 0]}>
-          <Col xs={24} sm={24} md={20} lg={20} xl={20} className="mb-24" >
-            <Card bordered={false} className="criclebox cardbody h-full">
-            <div className="project-ant">
-                <div>
-                  <Title level={5}>Décision</Title>
-                </div>
-              </div>
-              <Decision />
-            </Card>
-          </Col>
-        </Row>
+                </Card>
+              </Col>
+            </Row>
+            <Row gutter={[24, 0]}>
+              <Col xs={24} sm={24} md={20} lg={20} xl={20} className="mb-24" >
+                <Card bordered={false} className="criclebox cardbody h-full">
+                  <div className="project-ant">
+                    <div>
+                      <Title level={5}>Décision</Title>
+                    </div>
+                  </div>
+                  <Decision setTreated={setTreated} treatment={request.treatment} token={user.token} />
+                </Card>
+              </Col>
+            </Row>
 
-      </div>
-    </>
+          </div>
+    }</>
   );
 }
 

@@ -48,10 +48,11 @@ function Signatures() {
 
   const information = [
     {
-      title: "Oliver Liam",
-      description: "Viking Burrito",
-      address: "oliver@burrito.com",
-      vat: "FRB1235476",
+      firstname: "Alioune",
+      lastname: "SARR",
+      cni: "1870199802018",
+      email: "sarralioune@ept.sn",
+      telephone: "776735974",
     }
   ];
 
@@ -62,7 +63,7 @@ function Signatures() {
           <Card
             className="header-solid h-full"
             bordered={false}
-            title={[<h6 className="font-semibold m-0">Billing Information</h6>]}
+            title={[<h6 className="font-semibold m-0">Informations de Passport</h6>]}
             bodyStyle={{ paddingTop: "0" }}
           >
             <Row gutter={[24, 24]}>
@@ -70,16 +71,15 @@ function Signatures() {
                 <Col span={24} key={index}>
                   <Card className="card-billing-info" bordered="false">
                     <div className="col-info">
-                      <Descriptions title="Oliver Liam">
-                        <Descriptions.Item label="Company Name" span={3}>
-                          Viking Burrito
+                      <Descriptions title={i.firstname + " " + i.lastname}>
+                        <Descriptions.Item label="CNI" span={3}>
+                          {i.cni}
                         </Descriptions.Item>
-
-                        <Descriptions.Item label="Email Address" span={3}>
-                          oliver@burrito.com
+                        <Descriptions.Item label="Téléphone" span={3}>
+                          {i.telephone}
                         </Descriptions.Item>
-                        <Descriptions.Item label="VAT Number" span={3}>
-                          FRB1235476
+                        <Descriptions.Item label="Adresse mail" span={3}>
+                          {i.email}
                         </Descriptions.Item>
                       </Descriptions>
                     </div>

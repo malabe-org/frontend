@@ -18,6 +18,8 @@ import {
 import { NavLink, Link } from "react-router-dom";
 import styled from "styled-components";
 import avtar from "../../assets/images/team-2.jpg";
+import useToken from "../../hooks/useToken";
+import { logout } from "../../services/user";
 
 const ButtonContainer = styled.div`
   .ant-btn-primary {
@@ -225,12 +227,18 @@ function Header({
 
   const [visible, setVisible] = useState(false);
   const [sidenavType, setSidenavType] = useState("transparent");
-
+  const {token, setToken} = useToken();
   useEffect(() => window.scrollTo(0, 0));
 
   const showDrawer = () => setVisible(true);
   const hideDrawer = () => setVisible(false);
-
+  // console.log(JSON.parse(token));
+  const handleLogout = async () => {
+    setToken(undefined);
+    const user = JSON.parse(token);
+    await logout(user.token)
+    window.location.reload();
+  }
   return (
     <>
       <div className="setting-drwer" onClick={showDrawer}>
@@ -256,17 +264,6 @@ function Header({
           </div>
         </Col>
         <Col span={24} md={18} className="header-control">
-          <Badge size="small" count={4}>
-            <Dropdown overlay={menu} trigger={["click"]}>
-              <a
-                href="#pablo"
-                className="ant-dropdown-link"
-                onClick={(e) => e.preventDefault()}
-              >
-                {bell}
-              </a>
-            </Dropdown>
-          </Badge>
           <Button type="link" onClick={showDrawer}>
             {logsetting}
           </Button>
@@ -361,6 +358,7 @@ function Header({
                 </div>
                 
               </div>
+              <Button htmlType="button" type="ghost" onClick={e => handleLogout()}>SE DECONNECTER</Button>
             </div>
           </Drawer>
 

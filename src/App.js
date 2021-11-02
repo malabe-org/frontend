@@ -10,6 +10,7 @@ import useToken from "./hooks/useToken";
 import "antd/dist/antd.css";
 import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
+import UsersList from "./pages/admin/UsersList";
 
 function App() {
 
@@ -26,6 +27,11 @@ function App() {
           <Route exact path="/listings" component={Listings} />
           <Route exact path="/signatures" component={Signatures} />
           <Route exact path="/profile" component={Profile} />
+
+          {/* For Admin only */}
+          <Route exact path="/users" component={UsersList} />
+
+
           <Redirect from="*" to="/dashboard" />
         </Main>
       </Switch>

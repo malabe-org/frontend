@@ -133,7 +133,7 @@ function Sidenav({ color }) {
     <>
       <div className="brand">
         <img src={logo} alt="" />
-        <span>Muse Dashboard</span>
+        <span>MALABE</span>
       </div>
       <hr />
       <Menu theme="light" mode="inline">
@@ -177,10 +177,10 @@ function Sidenav({ color }) {
           </NavLink>
         </Menu.Item>
         
-        <Menu.Item className="menu-item-header" key="5">
-          Account Pages
+        <Menu.Item className="menu-item-header" key="4">
+          Mon Compte
         </Menu.Item>
-        <Menu.Item key="6">
+        <Menu.Item key="5">
           <NavLink to="/profile">
             <span
               className="icon"
@@ -190,7 +190,24 @@ function Sidenav({ color }) {
             >
               {profile}
             </span>
-            <span className="label">Profile</span>
+            <span className="label">Profil</span>
+          </NavLink>
+        </Menu.Item>
+        
+        <Menu.Item className="menu-item-header" key="6">
+          Admin
+        </Menu.Item>
+        <Menu.Item key="7">
+          <NavLink to="/users">
+            <span
+              className="icon"
+              style={{
+                background: page === "listings" ? color : "",
+              }}
+            >
+              {listings}
+            </span>
+            <span className="label">Utilisateurs</span>
           </NavLink>
         </Menu.Item>
       </Menu>
