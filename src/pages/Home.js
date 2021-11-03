@@ -10,7 +10,16 @@ import Decision from '../components/boxes/Decision';
 import useToken from "../hooks/useToken";
 import { getRequestsForPhUser, updateTreatment } from "../services/request";
 import { LoadingOutlined } from "@ant-design/icons";
+import { getNumberOfTreatedRequests } from "../utils/functions";
+import { BASE_SERVER_URL } from "../utils/constants";
 
+/**
+ * Generate the table rows for the files
+ * @param {*} label 
+ * @param {*} infos 
+ * @param {*} link 
+ * @returns 
+ */
 function generateTrDocument(label, infos, link) {
   return (
     <tr>
@@ -31,32 +40,37 @@ function generateTrDocument(label, infos, link) {
       </td>
       <td>
         <div className="avatar-group mt-2">
-          <p><a href={link} target="_blank">ICI</a></p>
+          <p><a href={BASE_SERVER_URL + link} target="_blank">ICI</a></p>
         </div>
       </td>
     </tr>
   )
 }
+/**
+ * Dashboard of the processing Hub user
+ * @returns 
+ */
 function Home() {
   const { Title, Text } = Typography;
 
   const [request, setRequest] = useState(undefined);
   const [treated, setTreated] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [statistics, setStatistics] = useState({total: 0});
+  const [statistics, setStatistics] = useState({total: 0, treated: 0});
   const {token, setToken } = useToken();
   const user = JSON.parse(token);
 
 
-  useEffect(() => {
+  useEffect(async () => {
     let mounted = true;
     setLoading(true);
-    getRequestsForPhUser(user.token).then(res => {
+    await getRequestsForPhUser(user.token).then(async (res) => {
       // console.log(res)
       if (res != "" && mounted && 'treatment' in res.currentRequest ) {
         setRequest(res.currentRequest);
         setStatistics({
-          total: res.allRequests.length
+          total: res.allRequests.length,
+          treated: getNumberOfTreatedRequests(res.allRequests)
         });
         // console.log(res)
         if((!("isOpen" in res.currentRequest.treatment))
@@ -69,7 +83,7 @@ function Home() {
           // console.log(!("isOpen" in res.currentRequest.treatment));
           // console.log(("isOpen" in res.currentRequest.treatment && res.currentRequest.treatment.isOpen == false))
           // console.log("Updating", res.currentRequest.treatment._id, values, user.token)
-          updateTreatment(res.currentRequest.treatment._id, values, user.token);
+          await updateTreatment(res.currentRequest.treatment._id, values, user.token);
         }
       }
       else {
@@ -80,7 +94,7 @@ function Home() {
 
     return () => mounted = false;
   }, [treated])
-
+  // Profile icon data
   const profile = [
     <svg
       width="22"
@@ -108,6 +122,7 @@ function Home() {
       ></path>
     </svg>,
   ];
+  // heart ICON data
   const heart = [
     <svg
       width="22"
@@ -125,23 +140,6 @@ function Home() {
       ></path>
     </svg>,
   ];
-  const cart = [
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      key={0}
-    >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M10 2C7.79086 2 6 3.79086 6 6V7H5C4.49046 7 4.06239 7.38314 4.00612 7.88957L3.00612 16.8896C2.97471 17.1723 3.06518 17.455 3.25488 17.6669C3.44458 17.8789 3.71556 18 4 18H16C16.2844 18 16.5554 17.8789 16.7451 17.6669C16.9348 17.455 17.0253 17.1723 16.9939 16.8896L15.9939 7.88957C15.9376 7.38314 15.5096 7 15 7H14V6C14 3.79086 12.2091 2 10 2ZM12 7V6C12 4.89543 11.1046 4 10 4C8.89543 4 8 4.89543 8 6V7H12ZM6 10C6 9.44772 6.44772 9 7 9C7.55228 9 8 9.44772 8 10C8 10.5523 7.55228 11 7 11C6.44772 11 6 10.5523 6 10ZM13 9C12.4477 9 12 9.44772 12 10C12 10.5523 12.4477 11 13 11C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9Z"
-        fill="#fff"
-      ></path>
-    </svg>,
-  ];
   const count = [
 
     {
@@ -152,7 +150,7 @@ function Home() {
     },
     {
       today: "Traités",
-      title: "2",
+      title: statistics.treated,
       icon: heart,
       bnb: "redtext",
     },
@@ -235,7 +233,8 @@ function Home() {
                       className="col-img"
                     >
                       <div className="ant-cret text-right">
-                        <img src="https://media-exp1.licdn.com/dms/image/C4E03AQGr-YK8gRgAsA/profile-displayphoto-shrink_100_100/0/1626970600352?e=1640822400&v=beta&t=owKOG2iGeEk6f7iNAXz-jzT_bY6fjCubry6AunHvgGo" alt="" className="border10" />
+                        <img src={BASE_SERVER_URL + request.documents.seekerPhoto} alt="Photo d'identité" className="border10" />
+                        {/* <img src="https://media-exp1.licdn.com/dms/image/C4E03AQGr-YK8gRgAsA/profile-displayphoto-shrink_100_100/0/1626970600352?e=1640822400&v=beta&t=owKOG2iGeEk6f7iNAXz-jzT_bY6fjCubry6AunHvgGo" alt="" className="border10" /> */}
                       </div>
                     </Col>
                   </Row>
@@ -278,7 +277,7 @@ function Home() {
                       <Title level={5}>Décision</Title>
                     </div>
                   </div>
-                  <Decision setTreated={setTreated} treatment={request.treatment} token={user.token} />
+                  <Decision setTreated={setTreated} treated={treated} treatment={request.treatment} token={user.token} />
                 </Card>
               </Col>
             </Row>

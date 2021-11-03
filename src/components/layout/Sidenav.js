@@ -2,6 +2,7 @@
 import { Menu, Button } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
+import newLogo from "../../assets/images/logo.jpeg";
 import useToken from "../../hooks/useToken";
 
 function Sidenav({ color }) {
@@ -135,7 +136,7 @@ function Sidenav({ color }) {
   return (
     <>
       <div className="brand">
-        <img src={logo} alt="" />
+        <img src={newLogo} alt="" />
         <span>MALABE</span>
       </div>
       <hr />
@@ -168,13 +169,14 @@ function Sidenav({ color }) {
                 <span className="label">Listing</span>
               </NavLink>
             </Menu.Item>
+            
           </>
 
           :
           user.role === "admin"
             ?
             <>
-            <Menu.Item key="7">
+            <Menu.Item key="4">
               <NavLink to="/users">
                 <span
                   className="icon"
@@ -187,7 +189,7 @@ function Sidenav({ color }) {
                 <span className="label">Utilisateurs</span>
               </NavLink>
             </Menu.Item>
-            <Menu.Item key="8">
+            <Menu.Item key="5">
               <NavLink to="/dhs">
                 <span
                   className="icon"
@@ -202,12 +204,27 @@ function Sidenav({ color }) {
             </Menu.Item>
             </>
             :
+            user.role === "dhUser" ?
+            <Menu.Item key="3">
+              <NavLink to="/requests">
+                <span
+                  className="icon"
+                  style={{
+                    background: page === "requests" ? color : "",
+                  }}
+                >
+                  {listings}
+                </span>
+                <span className="label">Requêtes</span>
+              </NavLink>
+            </Menu.Item>
+            :
             ""
         }
-        <Menu.Item className="menu-item-header" key="4">
+        <Menu.Item className="menu-item-header" key="6">
           Mon Compte
         </Menu.Item>
-        <Menu.Item key="5">
+        <Menu.Item key="7">
           <NavLink to="/profile">
             <span
               className="icon"

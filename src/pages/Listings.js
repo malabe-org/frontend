@@ -45,6 +45,12 @@ const columns = [
     dataIndex: "dateCloture",
   },
 ];
+
+/**
+ * Build the formated data table rows for the requests
+ * @param {*} requests 
+ * @returns 
+ */
 function buildDataTabelRows(requests) {
   var rows = [];
   console.log(requests[0].treatment);
@@ -58,15 +64,8 @@ function buildDataTabelRows(requests) {
         name: (
           <>
             <Avatar.Group>
-              {/* <Avatar
-                className="shape-avatar"
-                shape="square"
-                size={40}
-                src={face2}
-              ></Avatar> */}
               <div className="avatar-info">
                 <Title level={5}>{request.seeker.firstname} {request.seeker.lastname}</Title>
-                {/* <p>CNI : <b>{request.seeker._id}</b></p> */}
               </div>
             </Avatar.Group>{" "}
           </>
@@ -121,6 +120,10 @@ function buildDataTabelRows(requests) {
   return rows;
 }
 
+/**
+ * Show the list of the requests assigned to the current processing hub user
+ * @returns 
+ */
 function Listings() {
 
   const [loading, setLoading] = useState(true);

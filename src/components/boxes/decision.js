@@ -12,11 +12,11 @@ const layout = {
 const tailLayout = {
     wrapperCol: { offset: 0, span: 20 }
 }
-export default function Decision({ setTreated, treatment, token }) {
+export default function Decision({ setTreated, treatment, token, treated }) {
 
     const [form] = Form.useForm();
     const [motif, setMotif] = useState(treatment.reason);
-    console.log(treatment.reason);
+    // console.log(treatment.reason);
     const [loading, setLoading] = useState(false);
     const onFinish = async (values) => {
         // console.log(values);
@@ -28,7 +28,7 @@ export default function Decision({ setTreated, treatment, token }) {
             alert("Les champs ne doivent pas être vides.")
         }
         setLoading(false);
-        setTreated(true);
+        setTreated(!treated);
     }
     {/* <LoadingOutlined style={{ fontSize: "100px", color: "red" }} width="0px" height="0px"/> */}
 

@@ -1,12 +1,17 @@
 import Identicon from "identicon.js";
 
+// BASE URL of the backend
 export const BASE_API_URL = "https://malabe-backend.herokuapp.com/api"
 
+// BASE URL of the APIs
+export const BASE_SERVER_URL = "https://malabe-backend.herokuapp.com"
 
+// Form rule for require
 export const requiredFormRule = [
     { required: true, message: "Ce champ est obligatoire." }
 ];
 
+// The available addresses for Distribution Hub ceation
 export const addresses = [
     {
         region: "Thies",

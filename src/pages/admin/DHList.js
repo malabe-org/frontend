@@ -88,7 +88,7 @@ function DHList() {
         setLoading(true);
 
         await addDh(values, user.token).then(res => {
-            if('dhHub' in res){
+            if(res != ""){
                 setIsAddingModalVisible(false);
                 success("Le Hub de distribution a bien été créé.");
                 setRefresh(!refresh);

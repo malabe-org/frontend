@@ -26,6 +26,11 @@ export async function login(credentials) {
     });
     return resp;
 }
+/**
+ * Logout the user
+ * @param {*} token 
+ * @returns 
+ */
 export async function logout(token) {
     var resp = "";
     await fetch(BASE_API_URL + "/users/logout", {
@@ -42,6 +47,11 @@ export async function logout(token) {
     return resp;
 }
 
+/**
+ * Get the list of all the users
+ * @param {*} token 
+ * @returns 
+ */
 export async function getUsers(token) {
     var resp = "";
     await fetch(BASE_API_URL + "/users", {
@@ -58,6 +68,12 @@ export async function getUsers(token) {
     return resp;
 }
 
+/**
+ * Add a new user to the plateforme
+ * @param {*} values 
+ * @param {*} token 
+ * @returns 
+ */
 export async function signIn(values, token) {
     var resp = "";
     await fetch(BASE_API_URL + "/users/signup", {
@@ -75,6 +91,13 @@ export async function signIn(values, token) {
     return resp;
 }
 
+/**
+ * Update the users
+ * @param {*} idUser 
+ * @param {*} values 
+ * @param {*} token 
+ * @returns 
+ */
 export async function updateUser(idUser, values, token) {
     var resp = "";
     await fetch(BASE_API_URL + "/users/update" + (idUser != "" ? "/" + idUser : ""), {
@@ -92,6 +115,11 @@ export async function updateUser(idUser, values, token) {
     return resp;
 }
 
+/**
+ * Get the infotmations about the current user
+ * @param {*} token 
+ * @returns 
+ */
 export async function getCurrentUser(token) {
     var resp = "";
     await fetch(BASE_API_URL + "/users/me", {

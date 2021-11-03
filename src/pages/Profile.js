@@ -67,7 +67,10 @@ function Profile() {
     }
     return setConfirmpass({ status: "success", value: value })
   }
-
+  /**
+   * Handle the validation
+   * @param {*} values 
+   */
   const onFinish = async (values) => {
     if (!validationLoading) {
       if (values.password != confirmpass.value) {
@@ -92,6 +95,7 @@ function Profile() {
     let mounted = true;
     setLoading(true);
     await getCurrentUser(user.token).then(res => {
+      console.log(res);
       if (res != "" && mounted) {
         setCurrentUser(res);
       }
