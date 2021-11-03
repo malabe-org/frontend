@@ -11,32 +11,24 @@ import "antd/dist/antd.css";
 import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
 import UsersList from "./pages/admin/UsersList";
+import { useState } from "react";
+import { getRoutes } from "./utils/routes";
 
 function App() {
 
-  const {token, setToken} = useToken();
+  const {token, setToken, getUserToJson} = useToken();
+  const [user, setUser] = useState();
 
   if(!token) return <SignIn setToken={setToken}/>;
-  
+
   return (
     <div className="App">
       <Switch>
         <Route path="/sign-up" exact component={SignUp} />
         <Route path="/sign-in" exact component={SignIn} />
         <Main>
-          <Route exact path="/dashboard" component={Home} />
-          <Route exact path="/listings" component={Listings} />
-          <Route exact path="/signatures" component={Signatures} />
           <Route exact path="/profile" component={Profile} />
-
-          {/* For Admin only */}
-          <Route exact path="/users" component={UsersList} />
-
-          {token.role == "phUser" ? 
-            <Redirect from="*" to="/dashboard" />
-            :
-            <Redirect from="*" to="/users" />
-          }
+          {getRoutes(getUserToJson().role)}
         </Main>
       </Switch>
     </div>

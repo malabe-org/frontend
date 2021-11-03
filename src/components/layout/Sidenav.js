@@ -8,7 +8,7 @@ function Sidenav({ color }) {
   const { pathname } = useLocation();
   const page = pathname.replace("/", "");
 
-  const {token, setToken} = useToken();
+  const { token, setToken } = useToken();
   const user = JSON.parse(token);
   const dashboard = [
     <svg
@@ -55,7 +55,7 @@ function Sidenav({ color }) {
     </svg>,
   ];
 
-  const signatures = [
+  const dhs = [
     <svg
       width="20"
       height="20"
@@ -140,48 +140,70 @@ function Sidenav({ color }) {
       </div>
       <hr />
       <Menu theme="light" mode="inline">
-      {user.role == "phUser" ?
-        <>
-        <Menu.Item key="1">
-          <NavLink to="/dashboard">
-            <span
-              className="icon"
-              style={{
-                background: page === "dashboard" ? color : "",
-              }}
-            >
-              {dashboard}
-            </span>
-            <span className="label">Dashboard</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="2">
-          <NavLink to="/listings">
-            <span
-              className="icon"
-              style={{
-                background: page === "listings" ? color : "",
-              }}
-            >
-              {listings}
-            </span>
-            <span className="label">Listing</span>
-          </NavLink>
-        </Menu.Item>
-        {/* <Menu.Item key="3">
-          <NavLink to="/signatures">
-            <span
-              className="icon"
-              style={{
-                background: page === "signatures" ? color : "",
-              }}
-            >
-              {signatures}
-            </span>
-            <span className="label">Signatures</span>
-          </NavLink>
-        </Menu.Item> */}
-        
+        {user.role == "phUser" ?
+          <>
+            <Menu.Item key="1">
+              <NavLink to="/dashboard">
+                <span
+                  className="icon"
+                  style={{
+                    background: page === "dashboard" ? color : "",
+                  }}
+                >
+                  {dashboard}
+                </span>
+                <span className="label">Dashboard</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <NavLink to="/listings">
+                <span
+                  className="icon"
+                  style={{
+                    background: page === "listings" ? color : "",
+                  }}
+                >
+                  {listings}
+                </span>
+                <span className="label">Listing</span>
+              </NavLink>
+            </Menu.Item>
+          </>
+
+          :
+          user.role === "admin"
+            ?
+            <>
+            <Menu.Item key="7">
+              <NavLink to="/users">
+                <span
+                  className="icon"
+                  style={{
+                    background: page === "users" ? color : "",
+                  }}
+                >
+                  {listings}
+                </span>
+                <span className="label">Utilisateurs</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="8">
+              <NavLink to="/dhs">
+                <span
+                  className="icon"
+                  style={{
+                    background: page === "dhs" ? color : "",
+                  }}
+                >
+                  {dhs}
+                </span>
+                <span className="label">Distribution Hub</span>
+              </NavLink>
+            </Menu.Item>
+            </>
+            :
+            ""
+        }
         <Menu.Item className="menu-item-header" key="4">
           Mon Compte
         </Menu.Item>
@@ -198,23 +220,6 @@ function Sidenav({ color }) {
             <span className="label">Profil</span>
           </NavLink>
         </Menu.Item>
-        </>
-        
-        :
-        <Menu.Item key="7">
-          <NavLink to="/users">
-            <span
-              className="icon"
-              style={{
-                background: page === "listings" ? color : "",
-              }}
-            >
-              {listings}
-            </span>
-            <span className="label">Utilisateurs</span>
-          </NavLink>
-        </Menu.Item>
-      }
       </Menu>
 
     </>

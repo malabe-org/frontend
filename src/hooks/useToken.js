@@ -18,8 +18,17 @@ export default function useToken(){
         setToken(user);
     }
 
+    const getUserToJson = () => {
+        try {
+          return JSON.parse(token)
+        } catch (error) {
+          return token
+        }
+    }
+    
     return {
         token: token,
-        setToken: saveToken
+        setToken: saveToken,
+        getUserToJson: getUserToJson
     }
 }

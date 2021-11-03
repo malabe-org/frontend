@@ -48,22 +48,23 @@ const columns = [
 ];
 function buildDataTabelRows(requests) {
   var rows = [];
+  console.log(requests[0].treatment);
   requests.map((request, index) => {
     const created_at = new Date(request.created_at);
-    const updated_at = new Date(request.updated_at);
-    
+    const updated_at = new Date(request.treatment.closeDate);
+    // console.log(request);
     rows.push(
       {
         key: index,
         name: (
           <>
             <Avatar.Group>
-              <Avatar
+              {/* <Avatar
                 className="shape-avatar"
                 shape="square"
                 size={40}
                 src={face2}
-              ></Avatar>
+              ></Avatar> */}
               <div className="avatar-info">
                 <Title level={5}>{request.seeker.firstname} {request.seeker.lastname}</Title>
                 <p>CNI : <b>{request.seeker._id}</b></p>
@@ -109,7 +110,7 @@ function buildDataTabelRows(requests) {
         dateCloture: (
           <>
             <div className="ant-employed">
-              {request.treatment.decision == "OK" ?
+              {request.treatment.decision === "OK" || request.treatment.decision === "No-OK"?
                 <span>{updated_at.toUTCString()}</span>
                 :
                 ""

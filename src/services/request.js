@@ -1,9 +1,9 @@
-import { BASE_URL } from "../utils/constants";
+import { BASE_API_URL } from "../utils/constants";
 
 
 export async function getRequestBySeeker(idSeeker, token) {
     var response = "";
-    await fetch(BASE_URL + "/request/seeker/" + idSeeker, {
+    await fetch(BASE_API_URL + "/request/seeker/" + idSeeker, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -17,7 +17,7 @@ export async function getRequestBySeeker(idSeeker, token) {
 
 export async function getRequestById(idRequest, token) {
     var response = "";
-    await fetch(BASE_URL + "/request/" + idRequest, {
+    await fetch(BASE_API_URL + "/request/" + idRequest, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export async function getRequestById(idRequest, token) {
  */
 export async function updateTreatment(idTreatment, values, token) {
     var response = "";
-    await fetch(BASE_URL + "/treatment/update/" + idTreatment, {
+    await fetch(BASE_API_URL + "/treatment/update/" + idTreatment, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export async function updateTreatment(idTreatment, values, token) {
 export async function getRequestsForPhUser(token){
     var response = "";
 
-    await fetch(BASE_URL + "/request/for_phuser",
+    await fetch(BASE_API_URL + "/request/for_phuser",
         {
             method: "GET",
             headers: {

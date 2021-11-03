@@ -52,7 +52,7 @@ function Home() {
     setLoading(true);
     getRequestsForPhUser(user.token).then(req => {
       // console.log(req)
-      if (req != "" && mounted) {
+      if (req != "" && mounted && 'treatment' in req.currentRequest ) {
         setRequest(req.currentRequest);
         if((!("isOpen" in req.currentRequest.treatment))
           ||
@@ -165,7 +165,7 @@ function Home() {
         <LoadingOutlined style={{fontSize: "100px", color: "red"}} label="En cours de chargement..."/>
         :
 
-        request == undefined ?
+        request == undefined || request === "" || request == {} ?
           <h2>Pas de demande à traiter pour le moment.</h2>
           :
           <div className="layout-content">
@@ -213,7 +213,7 @@ function Home() {
                     >
                       <div className="h-full col-content p-20">
                         <div className="ant-muse">
-                          <Text>Built by developers</Text>
+                          {/* <Text>Built by developers</Text> */}
                           <Title level={5}>{request.seeker.firstname} {request.seeker.lastname}</Title>
                           <Paragraph className="lastweek mb-36">
                             CNI : <b>{request.seeker._id}</b>

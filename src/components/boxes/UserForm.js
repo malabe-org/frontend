@@ -1,7 +1,8 @@
 import { Button, Card, Col, Form, Input, Row, Select } from "antd"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useToken from "../../hooks/useToken";
 import { requiredFormRule } from "../../utils/constants";
+import { error } from "../commons";
 
 const { Option } = Select;
 
@@ -19,10 +20,10 @@ const leftWrapperCol = { span: 30, offset: 0 };
 const rightWrapperCol = { span: 30, offset: 2 };
 
 
-export function UserForm({ currentUser }) {
+export function UserForm({ selectedUser, handleOk }) {
     const { token, setToken } = useToken();
     const [form] = Form.useForm();
-    console.log(currentUser);
+
     const [password, setpassWord] = useState("");
     const [confirmpass, setConfirmpass] = useState({ value: "" });
 
@@ -32,10 +33,21 @@ export function UserForm({ currentUser }) {
         }
         return setConfirmpass({ status: "success", value: value })
     }
-
+    // console.log(selectedUser);
     const onFinish = (values) => {
-        console.log("Success", values);
+        values.password = "passer1234";
+        const ff = {};
+        for(const [key, value] of Object.entries(values)){
+            if(value == undefined || value === ""){
+                error("Vérifier les informations");
+                return
+            }
+        }
+        handleOk(values);
+
+        // console.log("Success", values);
     }
+    
     const onFinishFailed = (values) => {
         console.log("Failed ", values);
     }
@@ -58,7 +70,7 @@ export function UserForm({ currentUser }) {
                                         rules={requiredFormRule}
                                         name="firstname"
                                         wrapperCol={{ span: 24, offset: 0 }}
-                                        initialValue={currentUser?.firstname}
+                                        initialValue={selectedUser?.firstname}
                                     >
                                         <Input type="text" />
                                     </Form.Item>
@@ -69,7 +81,7 @@ export function UserForm({ currentUser }) {
                                         rules={requiredFormRule}
                                         wrapperCol={rightWrapperCol}
                                         labelCol={rightWrapperCol}
-                                        initialValue={currentUser?.lastname}
+                                        initialValue={selectedUser?.lastname}
                                     >
                                         <Input type="text" />
                                     </Form.Item>
@@ -77,19 +89,19 @@ export function UserForm({ currentUser }) {
                             </Row>
                             <Row justify="space-between">
                                 <Col span={12}>
-                                    <Form.Item label="Email" name="email" rules={requiredFormRule} initialValue={currentUser?.email} wrapperCol={leftWrapperCol}>
-                                        <Input type="text" />
+                                    <Form.Item label="Email" name="email" rules={requiredFormRule} initialValue={selectedUser?.email} wrapperCol={leftWrapperCol}>
+                                        <Input type="email" />
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label="Téléphone" name="phone" rules={requiredFormRule} initialValue={currentUser?.phone} wrapperCol={rightWrapperCol}>
+                                    <Form.Item label="Téléphone" name="phone" rules={requiredFormRule} initialValue={selectedUser?.phone} wrapperCol={rightWrapperCol}>
                                         <Input type="number" />
                                     </Form.Item>
                                 </Col>
                             </Row>
                             <Row justify="space-between">
                                 <Col span={12}>
-                                    <Form.Item label="Role" name="role" rules={requiredFormRule} initialValue={currentUser?.role} wrapperCol={leftWrapperCol}>
+                                    <Form.Item label="Role" name="role" rules={requiredFormRule} initialValue={selectedUser?.role} wrapperCol={leftWrapperCol}>
                                         <Select placeholder="Role de l'utilisateur">
                                             <Option value="phUser">PH User</Option>
                                             <Option value="dhUser">DH User</Option>
@@ -98,12 +110,15 @@ export function UserForm({ currentUser }) {
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label="CNI" name="cni" rules={requiredFormRule} initialValue={currentUser?.cni} wrapperCol={rightWrapperCol}>
-                                        <Input type="text" />
+                                    <Form.Item label="Genre" name="gender" rules={requiredFormRule} initialValue={selectedUser?.gender} wrapperCol={rightWrapperCol}>
+                                        <Select placeholder="Choisir le genre">
+                                            <Option value="Female">Femme</Option>
+                                            <Option value="Male">Homme</Option>
+                                        </Select>
                                     </Form.Item>
                                 </Col>
                             </Row>
-                            {currentUser == undefined ? <Row justify="space-between">
+                            {/* <Row justify="space-between">
                                 <Col span={12}>
                                     <Form.Item label="Mot de passe" name="password" rules={requiredFormRule} wrapperCol={leftWrapperCol}
                                         labelCol={{ span: 30, offset: 0 }}>
@@ -116,8 +131,8 @@ export function UserForm({ currentUser }) {
                                         <Input type="password" value={confirmpass.value} onChange={e => onConfirmpassChange(e.target.value)} />
                                     </Form.Item>
                                 </Col>
-                            </Row>
-                                : ""}
+                            </Row> */
+                            }
                             <Form.Item {...buttonLayout}>
                                 <Button htmlType="submit" type="primary" style={{ width: "100%" }}>VALIDER</Button>
                             </Form.Item>

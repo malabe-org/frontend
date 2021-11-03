@@ -11,6 +11,7 @@ import {
   Tag,
 } from "antd";
 import signinbg from "../assets/images/img-signin.jpg";
+import loginImage from "../assets/images/login-image.png";
 import PropTypes from "prop-types";
 import { LoadingOutlined } from "@ant-design/icons";
 
@@ -42,7 +43,7 @@ export default function SignIn({setToken}){
         <Layout className="layout-default layout-signin">
           <Header>
             <div className="header-col header-brand">
-              <h5>Processing HUB</h5>
+              <h5>MALABE</h5>
             </div>
           </Header>
           <Content className="signin">
@@ -110,7 +111,7 @@ export default function SignIn({setToken}){
                 lg={{ span: 12 }}
                 md={{ span: 12 }}
               >
-                <img src={signinbg} alt="" />
+                <img src={loginImage} alt="" />
               </Col>
             </Row>
           </Content>
