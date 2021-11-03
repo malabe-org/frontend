@@ -9,7 +9,6 @@ import {
   Typography,
 } from "antd";
 import { useEffect, useState } from "react";
-import face2 from "../assets/images/face-2.jpg";
 import useToken from "../hooks/useToken";
 import { getRequestsForPhUser } from "../services/request";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -25,9 +24,9 @@ const columns = [
     width: "32%",
   },
   {
-    title: "Requete",
-    dataIndex: "requete",
-    key: "requete",
+    title: "DESCRIPTION",
+    dataIndex: "description",
+    key: "description",
   },
 
   {
@@ -67,37 +66,35 @@ function buildDataTabelRows(requests) {
               ></Avatar> */}
               <div className="avatar-info">
                 <Title level={5}>{request.seeker.firstname} {request.seeker.lastname}</Title>
-                <p>CNI : <b>{request.seeker._id}</b></p>
+                {/* <p>CNI : <b>{request.seeker._id}</b></p> */}
               </div>
             </Avatar.Group>{" "}
           </>
         ),
-        requete: (
+        description: (
           <>
             <div className="author-info">
-              <Title level={5}>{request._id}</Title>
+              <Title level={5}>{request.description}</Title>
             </div>
           </>
         ),
 
         status: (
           <>
-
             {request.treatment.decision == "OK" ?
-              <Button type="primary" className="tag-primary">
+              <Button type="primary">
                 {"Conforme"}
               </Button>
               :
               (request.treatment.decision == "No-OK" ?
-                <Button type="dashed" className="tag-primary">
+                <Button type="primary" danger>
                   {"Non Conforme"}
                 </Button>
                 :
-                <Button type="default" className="tag-primary">
+                <Button type="default">
                   {"Pas traité"}
                 </Button>
               )}
-
           </>
         ),
         dateSoumission: (

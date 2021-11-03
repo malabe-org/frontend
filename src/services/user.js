@@ -3,7 +3,7 @@ import { BASE_API_URL } from "../utils/constants";
 /**
  * 1. First, we’re importing the fetch function from the JavaScript Fetch API.
  * 2. Next, we’re creating a variable called resp.
- * 3. Then, we’re making a POST request to the /api/users/login endpoint.
+ * 3. Then, we’re making a POST request to the /users/login endpoint.
  * 4. We’re setting the Content-Type header to application/json.
  * 5. We’re setting the body of the request to the credentials object.
  * 6. Finally, we’re returning the response.
@@ -13,7 +13,7 @@ import { BASE_API_URL } from "../utils/constants";
 
 export async function login(credentials) {
     var resp = "";
-    await fetch(BASE_API_URL + "/api/users/login", {
+    await fetch(BASE_API_URL + "/users/login", {
         method: 'POST',
         headers: {
             'Content-Type': "application/json"
@@ -28,7 +28,7 @@ export async function login(credentials) {
 }
 export async function logout(token) {
     var resp = "";
-    await fetch(BASE_API_URL + "/api/users/logout", {
+    await fetch(BASE_API_URL + "/users/logout", {
         method: 'POST',
         headers: {
             'Content-Type': "application/json",
@@ -44,7 +44,7 @@ export async function logout(token) {
 
 export async function getUsers(token) {
     var resp = "";
-    await fetch(BASE_API_URL + "/api/users", {
+    await fetch(BASE_API_URL + "/users", {
         method: 'GET',
         headers: {
             'Content-Type': "application/json",
@@ -60,7 +60,7 @@ export async function getUsers(token) {
 
 export async function signIn(values, token) {
     var resp = "";
-    await fetch(BASE_API_URL + "/api/users/signup", {
+    await fetch(BASE_API_URL + "/users/signup", {
         method: 'POST',
         headers: {
             'Content-Type': "application/json",
@@ -77,7 +77,7 @@ export async function signIn(values, token) {
 
 export async function updateUser(idUser, values, token) {
     var resp = "";
-    await fetch(BASE_API_URL + "/api/users/update" + (idUser != "" ? "/" + idUser : ""), {
+    await fetch(BASE_API_URL + "/users/update" + (idUser != "" ? "/" + idUser : ""), {
         method: 'PUT',
         headers: {
             'Content-Type': "application/json",
@@ -94,7 +94,7 @@ export async function updateUser(idUser, values, token) {
 
 export async function getCurrentUser(token) {
     var resp = "";
-    await fetch(BASE_API_URL + "/api/users/me", {
+    await fetch(BASE_API_URL + "/users/me", {
         method: 'GET',
         headers: {
             'Content-Type': "application/json",

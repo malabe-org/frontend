@@ -6,7 +6,7 @@ import {
 } from "antd";
 import Paragraph from "antd/lib/typography/Paragraph";
 import { useEffect, useState } from "react";
-import Decision from '../components/boxes/decision';
+import Decision from '../components/boxes/Decision';
 import useToken from "../hooks/useToken";
 import { getRequestsForPhUser, updateTreatment } from "../services/request";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -43,6 +43,7 @@ function Home() {
   const [request, setRequest] = useState(undefined);
   const [treated, setTreated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [statistics, setStatistics] = useState({total: 0});
   const {token, setToken } = useToken();
   const user = JSON.parse(token);
 
@@ -50,21 +51,25 @@ function Home() {
   useEffect(() => {
     let mounted = true;
     setLoading(true);
-    getRequestsForPhUser(user.token).then(req => {
-      // console.log(req)
-      if (req != "" && mounted && 'treatment' in req.currentRequest ) {
-        setRequest(req.currentRequest);
-        if((!("isOpen" in req.currentRequest.treatment))
+    getRequestsForPhUser(user.token).then(res => {
+      // console.log(res)
+      if (res != "" && mounted && 'treatment' in res.currentRequest ) {
+        setRequest(res.currentRequest);
+        setStatistics({
+          total: res.allRequests.length
+        });
+        // console.log(res)
+        if((!("isOpen" in res.currentRequest.treatment))
           ||
-        ("isOpen" in req.currentRequest.treatment && req.currentRequest.treatment.isOpen == false)){
+        ("isOpen" in res.currentRequest.treatment && res.currentRequest.treatment.isOpen == false)){
           const values ={
             isOpen: true,
             openDate: Date.now()
           }
-          // console.log(!("isOpen" in req.currentRequest.treatment));
-          // console.log(("isOpen" in req.currentRequest.treatment && req.currentRequest.treatment.isOpen == false))
-          // console.log("Updating", req.currentRequest.treatment._id, values, user.token)
-          updateTreatment(req.currentRequest.treatment._id, values, user.token);
+          // console.log(!("isOpen" in res.currentRequest.treatment));
+          // console.log(("isOpen" in res.currentRequest.treatment && res.currentRequest.treatment.isOpen == false))
+          // console.log("Updating", res.currentRequest.treatment._id, values, user.token)
+          updateTreatment(res.currentRequest.treatment._id, values, user.token);
         }
       }
       else {
@@ -140,23 +145,23 @@ function Home() {
   const count = [
 
     {
-      today: "Restant",
-      title: "3200",
+      today: "Total",
+      title: statistics.total,
       icon: profile,
       bnb: "bnb2",
     },
     {
       today: "Traités",
-      title: "10",
+      title: "2",
       icon: heart,
       bnb: "redtext",
     },
-    {
-      today: "En cours",
-      title: "800",
-      icon: cart,
-      bnb: "bnb2",
-    },
+    // {
+    //   today: "En cours",
+    //   title: "800",
+    //   icon: cart,
+    //   bnb: "bnb2",
+    // },
   ];
 
   return (

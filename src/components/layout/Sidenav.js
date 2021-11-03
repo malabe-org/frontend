@@ -197,7 +197,7 @@ function Sidenav({ color }) {
                 >
                   {dhs}
                 </span>
-                <span className="label">Distribution Hub</span>
+                <span className="label">Distribution Hubs</span>
               </NavLink>
             </Menu.Item>
             </>

@@ -14,6 +14,7 @@ import { getUsers, signIn, updateUser } from "../../services/user";
 import Modal from "antd/lib/modal/Modal";
 import { UserForm } from "../../components/boxes/UserForm";
 import { error, success } from "../../components/commons";
+import { getDhs } from "../../services/dh";
 
 const { Title } = Typography;
 
@@ -49,7 +50,7 @@ function UsersList() {
       title: "Prénom",
       dataIndex: "prenom",
       key: "prenom",
-      width: "32%",
+      width: "24%",
       sorter: (a, b) => a.prenom.length - b.prenom.length,
     },
     {
@@ -93,7 +94,7 @@ function UsersList() {
       render: (record) =>
         <>
           {/* <EditOutlined onClick={e => handleEditButton(record)} style={{ cursor: "pointer" }} /> */}
-          <Row onClick={() => handleResetPassword(record)} style={{ cursor: "pointer" }} justify="center" align="middle" >
+          <Row onClick={() => handleResetPassword(record)} style={{ cursor: "pointer", color:"#1890ff"  }} justify="center" align="middle" >
             <Col span={12}>
               <RedoOutlined type="primary" />
             </Col>
@@ -108,8 +109,10 @@ function UsersList() {
   const { token, setToken } = useToken();
   const user = JSON.parse(token);
   const [users, setUsers] = useState(undefined);
+  const [dhs, setDhs] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [selectedUser, setSelectedUser] = useState(undefined);
+  
   // For the modals
   const [isAddingModalVisible, setIsAddingModalVisible] = useState(false);
   const [isResetModalVisible, setIsResetModalVisible] = useState(false);
@@ -122,7 +125,7 @@ function UsersList() {
   };
   
   const handleResetOk = async () => {
-    console.log(selectedUser);
+    // console.log(selectedUser);
 
     setLoading(true);
     await updateUser(
@@ -149,7 +152,8 @@ function UsersList() {
   const handleAddOk = async (values) => {
     setLoading(true);
     await signIn(values, user.token).then(res => {
-      console.log(res);
+      // console.log(res);
+      setIsAddingModalVisible(false);
       if (res != "") {
         success("L'utilisateur a été correctement ajouté.");
         setRefresh(!refresh);
@@ -166,14 +170,20 @@ function UsersList() {
   useEffect(async () => {
     let mounted = true;
     setLoading(true);
-    await getUsers(user.token).then(req => {
-      // console.log(req)
-      if (req != "" && mounted) {
-        setUsers(req.users);
+    await getUsers(user.token).then(res => {
+      // console.log(res)
+      if (res != "" && mounted) {
+        setUsers(res.users);
       }
       else {
         setUsers(undefined);
       }
+    }).then(async (_) => {
+      await getDhs(user.token).then(res => {
+        if('dhHubs' in res){
+          setDhs(res.dhHubs);
+        }
+      })
     });
     setLoading(false);
 
@@ -197,7 +207,7 @@ function UsersList() {
               </Col>
             </Row>
             <Modal title="Ajouter Utilisateur" visible={isAddingModalVisible} footer={null} onOk={() => setIsAddingModalVisible(false)} onCancel={() => setIsAddingModalVisible(false)}>
-              <UserForm handleOk={handleAddOk} />
+              <UserForm handleOk={handleAddOk} dhs={dhs} />
             </Modal>
             <Modal title="Réinitialiser Mot de passe" visible={isResetModalVisible} onOk={handleResetOk} onCancel={() => setIsResetModalVisible(false)}>
               <p>Voulez-vous vraiment réinitialiser le mot de passe de <b>{selectedUser?.firstname} {selectedUser?.lastname}</b> ? <br /> Le nouveau mot de passe sera :  <b>passer1234</b></p>

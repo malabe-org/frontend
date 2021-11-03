@@ -13,18 +13,19 @@ import { EditOutlined, LoadingOutlined, RedoOutlined } from "@ant-design/icons";
 import Modal from "antd/lib/modal/Modal";
 import { error, success } from "../../components/commons";
 import { addDh, getDhs } from "../../services/dh";
+import { DHForm } from "../../components/boxes/DHForm";
 
 const { Title } = Typography;
 
 
-function buildDataTabelRows(dh) {
+function buildDataTabelRows(dhs) {
     var rows = [];
-    dh.map((dh, index) => {
+    dhs.map((dh, index) => {
         rows.push(
             {
                 key: index,
                 label: dh.label,
-                address: `${dh.address.region} ${dh.address.departement} ${dh.address.city}`,
+                address: `${dh.address.region} - ${dh.address.department} - ${dh.address.city}`,
                 location: dh.location,
                 action: dh
             },
@@ -57,11 +58,11 @@ function DHList() {
             dataIndex: "action",
             render: (record) =>
                 <>
-                    <Row onClick={() => handleEdit(record)} style={{ cursor: "pointer" }} justify="center" align="middle" >
-                        <Col span={12}>
-                            <EditOutlined type="primary" />
+                    <Row onClick={() => handleEdit(record)} style={{ cursor: "pointer", color:"#1890ff" }} justify="space-around" align="middle" >
+                        <Col span={6}>
+                            <EditOutlined/>
                         </Col>
-                        <Col span={12}>
+                        <Col span={18}>
                             <span style={{ fontSize: "10px" }} >Modifier</span>
                         </Col>
                     </Row>
@@ -71,7 +72,7 @@ function DHList() {
     const [loading, setLoading] = useState(true);
     const { token, setToken } = useToken();
     const user = JSON.parse(token);
-    const [dh, setdh] = useState(undefined);
+    const [dhs, setDhs] = useState(undefined);
     const [refresh, setRefresh] = useState(false);
     // For the modals
     const [isAddingModalVisible, setIsAddingModalVisible] = useState(false);
@@ -86,7 +87,14 @@ function DHList() {
     const handleAddOk = async (values) => {
         setLoading(true);
 
-
+        await addDh(values, user.token).then(res => {
+            if('dhHub' in res){
+                setIsAddingModalVisible(false);
+                success("Le Hub de distribution a bien été créé.");
+                setRefresh(!refresh);
+            }
+            else error("Une erreur est survenue.")
+        })
 
         setLoading(false);
     }
@@ -98,7 +106,11 @@ function DHList() {
         let mounted = true;
         setLoading(true);
 
-
+        await getDhs(user.token).then(res => {
+            if('dhHubs' in res){
+                setDhs(res.dhHubs);
+            }
+        })
 
         setLoading(false);
 
@@ -122,10 +134,10 @@ function DHList() {
                             </Col>
                         </Row>
                         <Modal title="Ajouter Hub de distribution" visible={isAddingModalVisible} footer={null} onOk={() => setIsAddingModalVisible(false)} onCancel={() => setIsAddingModalVisible(false)}>
-                            
+                            <DHForm handleOk={handleAddOk}/>
                         </Modal>
 
-                        {dh == undefined ?
+                        {dhs == undefined ?
                             <h2>Aucun Hub de distribution  pour le moment.</h2>
                             :
                             <div className="tabled">
@@ -139,7 +151,7 @@ function DHList() {
                                             <div className="table-responsive">
                                                 <Table
                                                     columns={columns}
-                                                    dataSource={buildDataTabelRows(dh)}
+                                                    dataSource={buildDataTabelRows(dhs)}
                                                     pagination={false}
                                                     className="ant-border-space"
                                                 />

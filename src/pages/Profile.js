@@ -85,7 +85,7 @@ function Profile() {
     // console.log("Success", values);
   }
   const onFinishFailed = (values) => {
-    console.log("Failed ", values);
+    // console.log("Failed ", values);
   }
 
   useEffect(async () => {
@@ -118,7 +118,16 @@ function Profile() {
                 <Avatar size={74} shape="square" src={"data:image/png;base64," + ICON_DATA} />
                 <div className="avatar-info">
                   <h4 className="font-semibold m-0">{user.firstname} {user.lastname}</h4>
-                  <p>{user.role == "phUser" ? "Membre Processing HUB" : ""} </p>
+                  <p>{user.role == "phUser" 
+                    ?
+                    "Membre Processing HUB"
+                    :
+                    user.role === "dhUser" ?
+                      "Membre Distribution HUB":
+                      user.role === "admin" ?
+                        "Administrateur":
+                        ""}
+                    </p>
                 </div>
               </Avatar.Group>
             </Col>

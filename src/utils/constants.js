@@ -25,7 +25,7 @@ export const addresses = [
             {
                 departement: "Rufisque",
                 cities : [
-                    "Diamnidio", "Sebikotane"
+                    "Diamniadio", "Sebikotane"
                 ]
             }
         ]

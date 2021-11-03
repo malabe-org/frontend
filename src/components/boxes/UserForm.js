@@ -17,16 +17,25 @@ const buttonLayout = {
     }
 }
 const leftWrapperCol = { span: 30, offset: 0 };
-const rightWrapperCol = { span: 30, offset: 2 };
 
+const righColConfig = {
+    labelCol: {span: 30, offset: 2},
+    wrapperCol: { span: 30, offset: 2 }
+}
 
-export function UserForm({ selectedUser, handleOk }) {
+export function UserForm({ selectedUser, handleOk, dhs }) {
     const { token, setToken } = useToken();
     const [form] = Form.useForm();
 
     const [password, setpassWord] = useState("");
     const [confirmpass, setConfirmpass] = useState({ value: "" });
+    const [showDHSelect, setShowDHSelect] = useState(false);
+    const [role, setRole] = useState();
 
+    const handleRoleChange = (value) => {
+        if (value === "dhUser") setShowDHSelect(true);
+        else setShowDHSelect(false);
+    }
     const onConfirmpassChange = (value) => {
         if (value != password) {
             return setConfirmpass({ status: "error", message: "Les deux mots de passe ne correspondent pas.", value: value })
@@ -49,7 +58,7 @@ export function UserForm({ selectedUser, handleOk }) {
     }
     
     const onFinishFailed = (values) => {
-        console.log("Failed ", values);
+        // console.log("Failed ", values);
     }
     return (
         <>
@@ -79,8 +88,7 @@ export function UserForm({ selectedUser, handleOk }) {
                                     <Form.Item label="Nom"
                                         name="lastname"
                                         rules={requiredFormRule}
-                                        wrapperCol={rightWrapperCol}
-                                        labelCol={rightWrapperCol}
+                                        {...righColConfig}
                                         initialValue={selectedUser?.lastname}
                                     >
                                         <Input type="text" />
@@ -94,7 +102,7 @@ export function UserForm({ selectedUser, handleOk }) {
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label="Téléphone" name="phone" rules={requiredFormRule} initialValue={selectedUser?.phone} wrapperCol={rightWrapperCol}>
+                                    <Form.Item label="Téléphone" name="phone" rules={requiredFormRule} initialValue={selectedUser?.phone} {...righColConfig}>
                                         <Input type="number" />
                                     </Form.Item>
                                 </Col>
@@ -102,7 +110,7 @@ export function UserForm({ selectedUser, handleOk }) {
                             <Row justify="space-between">
                                 <Col span={12}>
                                     <Form.Item label="Role" name="role" rules={requiredFormRule} initialValue={selectedUser?.role} wrapperCol={leftWrapperCol}>
-                                        <Select placeholder="Role de l'utilisateur">
+                                        <Select placeholder="Role de l'utilisateur" onSelect={value => handleRoleChange(value)}>
                                             <Option value="phUser">PH User</Option>
                                             <Option value="dhUser">DH User</Option>
                                             <Option value="admin">Admin</Option>
@@ -110,7 +118,7 @@ export function UserForm({ selectedUser, handleOk }) {
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
-                                    <Form.Item label="Genre" name="gender" rules={requiredFormRule} initialValue={selectedUser?.gender} wrapperCol={rightWrapperCol}>
+                                    <Form.Item label="Genre" name="gender" rules={requiredFormRule} initialValue={selectedUser?.gender} {...righColConfig}>
                                         <Select placeholder="Choisir le genre">
                                             <Option value="Female">Femme</Option>
                                             <Option value="Male">Homme</Option>
@@ -118,6 +126,23 @@ export function UserForm({ selectedUser, handleOk }) {
                                     </Form.Item>
                                 </Col>
                             </Row>
+                            {
+                                showDHSelect ? 
+                            
+                            <Row justify="space-around">
+                                <Col span={24}>
+                                    <Form.Item label="Distribution HUB" name="dhHub" rules={requiredFormRule} initialValue={selectedUser?.dhHub} wrapperCol={leftWrapperCol}>
+                                        <Select placeholder="Distribution HUB">
+                                            {dhs.map(dh => 
+                                                <Option value={dh._id} >{dh.label} | {dh.address.region} - {dh.address.department} - {dh.address.city}</Option>
+                                            )}
+                                        </Select>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                            :
+                            ""
+                        }
                             {/* <Row justify="space-between">
                                 <Col span={12}>
                                     <Form.Item label="Mot de passe" name="password" rules={requiredFormRule} wrapperCol={leftWrapperCol}
